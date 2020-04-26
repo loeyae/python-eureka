@@ -37,7 +37,7 @@ def send_mail(ip_address):
     try:
         smtpObj = smtplib.SMTP()
         smtpObj.connect("smtp.qq.com", 587)
-        smtpObj.login("loeye@qq.com", "utjuwnidnaasbgeh")
+        smtpObj.login("loeye@qq.com", "")
         smtpObj.sendmail(sender, receivers, message.as_string())
         print("邮件发送成功")
     except smtplib.SMTPException as e:
