@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-deployment
+  labels:
+    app: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring
+  template:
+    metadata:
+      labels:
+        app: monitoring
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+      - name: monitoring
+        image: monitoring:0.0.4
+        command: ["python","/var/work/app.py","test"]
+        ports:
+          - containerPort: 8888
+            name: port-8888
+        env:
+          - name: ENV
+            value: test
+        volumeMounts:
+            - name: tz-log
+              mountPath: /var/log/
+        lifecycle:
+          preStop:
+            exec:
+              command:
+                - python
+                - /var/work/EurekaClient.py
+      volumes:
+        - name: tz-log
+          hostPath:
+            path: /var/log/monitoring/

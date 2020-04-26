@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-test-deployment
+  labels:
+    app: monitoring-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-test
+  template:
+    metadata:
+      labels:
+        app: monitoring-test
+    spec:
+      containers:
+        - name: monitoring-test
+          image: monitoring-test:0.0.1
+          volumeMounts:
+            - name: tz-log
+              mountPath: /var/log/
+      volumes:
+        - name: tz-log
+          hostPath:
+            path: /var/log/monitoring-test/
