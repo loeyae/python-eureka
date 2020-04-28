@@ -39,3 +39,22 @@ spec:
         - name: tz-log
           hostPath:
             path: /var/log/monitoring/
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: monitoring
+  name: monitoring
+spec:
+  ports:
+    - port: 8888
+      name: port-8888
+      protocol: TCP
+      targetPort: 8888
+  selector:
+    app: monitoring
+  externalIPs:
+    - 192.168.1.220

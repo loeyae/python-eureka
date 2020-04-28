@@ -19,10 +19,13 @@ url = 'http://httpbin.org/ip'
 
 
 def get_ip():
-    response = urllib.request.urlopen(url)
-    js = json.loads(response.read().decode())
-    if js['origin']:
-        return js['origin']
+    try:
+        response = urllib.request.urlopen(url)
+        js = json.loads(response.read().decode())
+        if js['origin']:
+            return js['origin']
+    except urllib.error.HTTPError as e:
+        print(e)
     return None
 
 def send_mail(ip_address):
@@ -37,7 +40,7 @@ def send_mail(ip_address):
     try:
         smtpObj = smtplib.SMTP()
         smtpObj.connect("smtp.qq.com", 587)
-        smtpObj.login("loeye@qq.com", "")
+        smtpObj.login("loeye@qq.com", "utjuwnidnaasbgeh")
         smtpObj.sendmail(sender, receivers, message.as_string())
         print("邮件发送成功")
     except smtplib.SMTPException as e:
