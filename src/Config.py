@@ -50,3 +50,6 @@ if num >= 1:
 
 APP_ENV = os.environ.get('APP_ENV', env).lower()
 config = mapping[APP_ENV]()
+
+if __name__ == '__main___':
+    print(config)

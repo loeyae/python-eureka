@@ -4,9 +4,10 @@ from typing import Callable
 
 import tornado.ioloop
 import tornado.httpclient
-import Config
 from tornado.escape import json_decode, json_encode
 from enum import Enum
+
+from Config import config
 
 
 class EurekaStatus(Enum):
@@ -22,7 +23,7 @@ class EurekaClient(object):
 
     def __init__(self):
         self.application = {}
-        self.config = Config.config
+        self.config = config
         self.secure_port = 443
         self.name = self.config.SERVER_NAME
         self.port = self.config.SERVER_PORT
@@ -147,22 +148,21 @@ class EurekaClient(object):
 
     class actuator():
 
+
         @classmethod
         def info(cls):
             return json_encode([])
 
         @classmethod
-        def health(cls):
-            return json_encode({'status': Client.STATUS.value})
+        def health(cls, client):
+            return json_encode({'status': client.STATUS.value})
 
 
-Client = EurekaClient()
 
-def main():
-    tornado.ioloop.IOLoop.current().run_sync(Client.all)
 
 if __name__ == '__main__':
     def f():
         return Client.remove()
-    ret = tornado.ioloop.IOLoop.current().run_sync(f)
 
+
+    ret = tornado.ioloop.IOLoop.current().run_sync(f)

@@ -13,7 +13,7 @@ import smtplib
 import json
 from email.mime.text import MIMEText
 from email.header import Header
-import Config
+from Config import config
 
 url = 'http://httpbin.org/ip'
 
@@ -26,7 +26,7 @@ def get_ip():
     return None
 
 def send_mail(ip_address):
-    message = MIMEText("当前IP为: {ip}, 服务器：{host}发送".format(ip=ip_address, host=Config.config.IP_ADDRESS), 'plain', 'utf-8')
+    message = MIMEText("当前IP为: {ip}, 服务器：{host}发送".format(ip=ip_address, host=config.IP_ADDRESS), 'plain', 'utf-8')
     message['From'] = Header("loeye <loeye@qq.com>", 'utf-8')  # 发送者
     message['To'] = Header("loeyae", 'utf-8')  # 接收者
 
@@ -48,6 +48,8 @@ def send_mail(ip_address):
 def check_ip(ip):
     tempdir = tempfile.gettempdir()
     temple = os.path.join(tempdir, "ip-txt")
+    if not os.path.exists(temple):
+        os.mkfifo(temple, 0X777)
     with open(temple, "r+") as f:
         c = f.read()
         if c != ip:
